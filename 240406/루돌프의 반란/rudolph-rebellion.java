@@ -131,6 +131,7 @@ public class Main {
 
             if (0 > ny || 0 > nx || ny >= N || nx >= N) {
                 santa.die = true;
+                visited[santa.y][santa.x] = 0;
             } else {
 
                 int num = visited[ny][nx];
@@ -205,6 +206,7 @@ public class Main {
 
                 if (0 > ny || 0 > nx || ny >= N || nx >= N) {
                     santa.die = true;
+                    visited[santa.y][santa.x] = 0;
                     continue;
                 }
 
