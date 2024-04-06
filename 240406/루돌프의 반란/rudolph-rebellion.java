@@ -32,7 +32,6 @@ public class Main {
     static int[] dy = {0,1,0,-1,1,1,-1,-1};
     static int[] dx = {-1,0,1,0,1,-1,1,-1};
     static int[][] visited;
-    static int dieCnt = 0;
 
     public static void main(String[] args) throws IOException {
 
@@ -62,29 +61,13 @@ public class Main {
         }
 
         int time = 1;
-
-//        System.out.println("roudolf.y = " + roudolf.y + " roudolf.x = " + roudolf.x);
         while (time <= M) {
 
             Collections.sort(santas, (a,b) -> a.number - b.number);
-//            System.out.println("===================================" + time);
             roudolfMove(time);
             santaMove(time);
-//            System.out.println("roudolf.y = " + roudolf.y + " roudolf.x = " + roudolf.x);
-
             overTurnAddScore();
-
-//            StringBuilder sb = new StringBuilder();
-//
-//            for (int i = 1; i < santas.size(); i++) {
-//                Node santa = santas.get(i);
-//                if (!santa.die) System.out.println("santa.number = " + santa.number + " santa.y = " + santa.y + " santa.x = " + santa.x + " santa.stunTime = " + santa.stunTime);
-//                sb.append(santa.score + " ");
-//            }
-//            System.out.println(sb.toString());
-
-
-            if(dieCnt == P) break;
+            if(getDeathCount() == P) break;
             time++;
         }
 
@@ -122,8 +105,7 @@ public class Main {
         int k = 0;
         int dist = Integer.MAX_VALUE;
         int[] target = q.poll();
-//        System.out.println("Arrays.toString(target) = " + Arrays.toString(target));
-        
+
         for (int i = 0; i < 8; i++) {
             int ny = roudolf.y + dy[i];
             int nx = roudolf.x + dx[i];
@@ -149,7 +131,6 @@ public class Main {
 
             if (0 > ny || 0 > nx || ny >= N || nx >= N) {
                 santa.die = true;
-                dieCnt++;
             } else {
 
                 int num = visited[ny][nx];
@@ -179,7 +160,6 @@ public class Main {
                         if (next_y == N || next_x == N || next_y < 0 || next_x < 0) {
                             Node s = santas.get(num);
                             s.die = true;
-                            dieCnt++;
                             break;
                         }
                     }
@@ -262,7 +242,6 @@ public class Main {
                         if (next_y == N || next_x == N || next_y < 0 || next_x < 0) {
                             Node s = santas.get(num);
                             s.die = true;
-                            dieCnt++;
                             break;
                         }
                     }
@@ -315,5 +294,15 @@ public class Main {
 
     static int getDistance(Node node1, Node node2) {
         return (int) (Math.pow(node1.y - node2.y, 2) + Math.pow(node1.x - node2.x, 2));
+    }
+
+    static int getDeathCount() {
+
+        int cnt = 0;
+        for (int i = 1; i < santas.size(); i++) {
+            if (santas.get(i).die) cnt++;
+        }
+
+        return cnt;
     }
 }
