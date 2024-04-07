@@ -4,7 +4,8 @@ import java.util.*;
 public class Main {
 
     static int N,Q;
-    static int[] parent, authority;
+    static int[][] parent;
+    static int[] authority;
     static boolean[][] related;
     static int ans = 0;
 
@@ -15,13 +16,8 @@ public class Main {
 
         N = stoi(st.nextToken());
         Q = stoi(st.nextToken());
-        parent = new int[N+1];
+        parent = new int[N+1][2];
         authority = new int[N+1];
-        related = new boolean[N+1][N+1];
-
-        for (int i = 0; i <= N; i++) {
-            Arrays.fill(related[i], true);
-        }
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < Q; i++) {
@@ -30,7 +26,7 @@ public class Main {
             String cmd = st.nextToken();
             if (cmd.equals("100")) {
                 for (int j = 1; j <= N; j++) {
-                    parent[j] = stoi(st.nextToken());
+                    parent[j] = new int[]{stoi(st.nextToken()), 1};
                 }
 
                 for (int j = 1; j <= N; j++) {
@@ -61,7 +57,7 @@ public class Main {
                 ans = 0;
 //                System.out.println("i = " + i);
                 for (int j = 1; j <= N ; j++) {
-                    getParent(0, j, j, parent[j], c);
+                    getParent(0, j, j, parent[j][0], c);
                 }
 
                 sb.append(ans).append("\n");
@@ -76,19 +72,19 @@ public class Main {
 //        System.out.println("related[current][parent[current]] = " + related[current][parent[current]]);
 
         if (depth == authority[start]) return current;
-        if (related[current][parent[current]]) {
-            int n = parent[current];
+        if (parent[current][1] == 1) {
+            int n = parent[current][0];
             if (n == target) ans++;
-            getParent(depth+1, start, n, parent[n], target);
+            getParent(depth+1, start, n, parent[n][0], target);
         }
         return 0;
     }
 
     static void switchParent(int c1, int c2) {
 
-        int temp = parent[c1];
-        parent[c1] = parent[c2];
-        parent[c2] = temp;
+        int temp = parent[c1][0];
+        parent[c1][0] = parent[c2][0];
+        parent[c2][0] = temp;
     }
 
     static void switchPower(int c, int power) {
@@ -97,8 +93,10 @@ public class Main {
 
     static void switchAlarm(int c) {
 
-        for (int i = 1; i <= N; i++) {
-            related[c][i] = !related[c][i];
+        if (parent[c][1] == 1) {
+            parent[c][1] = -1;
+        } else {
+            parent[c][1] = 1;
         }
     }
 
