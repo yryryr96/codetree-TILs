@@ -122,7 +122,7 @@ public class Main {
                     if (!canMove(night.number, n,d)) return;
                 }
 
-                if (waiting.size() == 0 || before == candidates.size()) break;
+                if (waiting.size() == 0) break;
 
                 for (int[] wait : waiting) {
                     candidates.put(wait[0], wait[1]);
@@ -134,6 +134,7 @@ public class Main {
 
         List<int[]> moveCandidate = new ArrayList<>();
         for (Integer key : candidates.keySet()) {
+//            System.out.println("key = " + key);
             Integer distance = candidates.get(key);
             moveCandidate.add(new int[]{key, distance});
         }
@@ -152,6 +153,8 @@ public class Main {
 //        for (int i = 0; i < L; i++) {
 //            System.out.println(Arrays.toString(visited[i]));
 //        }
+//
+//        System.out.println("getAnswer() = " + getAnswer());
 ////
 //        for (int i = 1; i <= 2; i++) {
 //            System.out.println(i + " " + nights.get(i).damage);
@@ -213,7 +216,7 @@ public class Main {
     }
 
     static boolean canMove(int num, Night night, int d) {
-
+//        System.out.println("night.number = " + night.number);
         List<Pair> pairs = getPairs(night, d);
         for (Pair pair : pairs) {
             int ny = pair.y + dy[d];
@@ -230,6 +233,7 @@ public class Main {
 
                 waiting.add(new int[]{visited[ny][nx], distance});
             }
+
             if (!isInRange(ny,nx) || board[ny][nx] == 2) return false;
         }
 
