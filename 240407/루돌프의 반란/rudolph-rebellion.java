@@ -64,7 +64,7 @@ public class Main {
 //        for (int i = 0; i < N; i++) {
 //            System.out.println(Arrays.toString(visited[i]));
 //        }
-
+//
         StringBuilder sb = new StringBuilder();
 //        for (int i = 1; i < santas.size(); i++) {
 //            sb.append(santas.get(i).score + " ");
@@ -78,7 +78,7 @@ public class Main {
             santaMove(time);
             overTurnAddScore();
             if(getDeathCount() == P) break;
-
+//
 //            System.out.println("roudolf = " + roudolf.y + " roudolf.x = " + roudolf.x);
 //            for (int i = 0; i < N; i++) {
 //                System.out.println(Arrays.toString(visited[i]));
@@ -151,7 +151,6 @@ public class Main {
             santa.score += C;
             int ny = santa.y + dy[dir]*C;
             int nx = santa.x + dx[dir]*C;
-            visited[roudolf.y][roudolf.x] = 0;
 
             if (!isInRange(ny, nx)) {
                 santa.die = true;
@@ -168,9 +167,11 @@ public class Main {
                         lastX += dx[dir];
                     }
 
-//                    System.out.println("lastY = " + lastY + " lastX = " + lastX);
                     if (!isInRange(lastY, lastX)) {
-                        santas.get(visited[lastY - dy[dir]][lastX - dx[dir]]).die = true;
+                        Node s = santas.get(visited[lastY - dy[dir]][lastX - dx[dir]]);
+                        s.die = true;
+                        lastY -= dy[dir];
+                        lastX -= dx[dir];
                     }
 
                     while (isInRange(lastY, lastX) && (lastY != firstY || lastX != firstX)) {
@@ -178,10 +179,11 @@ public class Main {
                         Node s = santas.get(visited[lastY][lastX]);
                         s.y = lastY; s.x = lastX;
                         lastY -= dy[dir];
-                        lastX += dx[dir];
+                        lastX -= dx[dir];
                     }
                 }
 
+                visited[roudolf.y][roudolf.x] = 0;
                 santa.y = ny;
                 santa.x = nx;
                 visited[ny][nx] = santa.number;
@@ -243,6 +245,8 @@ public class Main {
 
                     if (!isInRange(lastY, lastX)) {
                         santas.get(visited[lastY - dy[dir]][lastX - dx[dir]]).die = true;
+                        lastY -= dy[dir];
+                        lastX -= dx[dir];
                     }
 
                     while (isInRange(lastY, lastX) && (lastY != firstY || lastX != firstX)) {
@@ -251,7 +255,7 @@ public class Main {
                         Node s = santas.get(visited[lastY][lastX]);
                         s.y = lastY; s.x = lastX;
                         lastY -= dy[dir];
-                        lastX += dx[dir];
+                        lastX -= dx[dir];
                     }
                 }
             }
