@@ -70,7 +70,7 @@ public class Main {
     static int getParent(int depth, int start, int current, int target) {
 //        System.out.println("start = " + start + " current = " + current + " parent[current] = " + parent[current]);
 //        System.out.println("related[current][parent[current]] = " + related[current][parent[current]]);
-
+        if (current == 0) return 0;
         if (depth == authority[start]) return current;
         if (parent[current][1] == 1) {
             int n = parent[current][0];
