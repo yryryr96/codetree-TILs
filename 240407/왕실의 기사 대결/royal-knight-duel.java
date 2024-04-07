@@ -68,7 +68,7 @@ public class Main {
 
             nights.put(i, new Night(i, r,c,h,w,k,0,true));
         }
-//
+
 //        for (int i = 0; i < L; i++) {
 //            System.out.println(Arrays.toString(visited[i]));
 //        }
@@ -105,14 +105,15 @@ public class Main {
         for (Integer key : candidates.keySet()) {
             Night n = nights.get(key);
             if (!canMove(n,d)) return;
+//            System.out.println("n.number = " + n.number);
         }
-
+        
         List<int[]> moveCandidate = new ArrayList<>();
         for (Integer key : candidates.keySet()) {
             Integer distance = candidates.get(key);
             moveCandidate.add(new int[]{key, distance});
         }
-
+        
         Collections.sort(moveCandidate, (a,b) -> b[1] - a[1]);
         for (int[] candi : moveCandidate) {
             move(nights.get(candi[0]), d);
@@ -123,12 +124,12 @@ public class Main {
             receiveDamage(nights.get(candi[0]));
         }
 //
-//        //
+        //
 //        for (int i = 0; i < L; i++) {
 //            System.out.println(Arrays.toString(visited[i]));
 //        }
 //
-//        for (int i = 1; i <= 3; i++) {
+//        for (int i = 1; i <= 2; i++) {
 //            System.out.println(i + " " + nights.get(i).damage);
 //        }
     }
@@ -140,6 +141,7 @@ public class Main {
         for (Pair pair : pairs) {
             int y = pair.y;
             int x = pair.x;
+//            System.out.println("y = " + y + " x = " + x);
             while (isInRange(y,x)) {
 
                 if (visited[y][x] == 0) break;
@@ -152,7 +154,6 @@ public class Main {
                 y += dy[d];
                 x += dx[d];
             }
-
             if (!isInRange(y,x)) return false;
         }
 
@@ -177,7 +178,7 @@ public class Main {
             }
         } else {
             for (int i = night.r; i < night.r + night.h; i++) {
-                pairs.add(new Pair(night.c, i));
+                pairs.add(new Pair(i, night.c));
             }
         }
 
