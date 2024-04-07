@@ -23,7 +23,7 @@ public class Main {
     static int[] dy = {-1,0,1,0};
     static int[] dx = {0,1,0,-1};
     static int[][] visited;
-
+    static List<int[]> waiting;
     static HashMap<Integer, Night> nights = new HashMap<>();
     static HashMap<Integer, Integer> candidates = new HashMap<>();
     static List<Pair> findPairs =  new ArrayList<>();
@@ -80,7 +80,6 @@ public class Main {
             d = stoi(st.nextToken());
             simulate(i+1, id, d);
         }
-
         System.out.println(getAnswer());
     }
 
@@ -102,12 +101,37 @@ public class Main {
         if (!night.live) return;
         if(!getCandidate(night, d)) return;
 
+        int size = candidates.size();
+        waiting = new ArrayList<>();
+
         for (Integer key : candidates.keySet()) {
             Night n = nights.get(key);
-            if (!canMove(n,d)) return;
-//            System.out.println("n.number = " + n.number);
+            if (!canMove(night.number, n,d)) return;
         }
-        
+
+        for (int[] wait : waiting) {
+            candidates.put(wait[0], wait[1]);
+        }
+
+        if (size != candidates.size()) {
+            int before = size;
+            while (true) {
+                waiting = new ArrayList<>();
+                for (Integer key : candidates.keySet()) {
+                    Night n = nights.get(key);
+                    if (!canMove(night.number, n,d)) return;
+                }
+
+                if (waiting.size() == 0 || before == candidates.size()) break;
+
+                for (int[] wait : waiting) {
+                    candidates.put(wait[0], wait[1]);
+                }
+
+                before = candidates.size();
+            }
+        }
+
         List<int[]> moveCandidate = new ArrayList<>();
         for (Integer key : candidates.keySet()) {
             Integer distance = candidates.get(key);
@@ -123,15 +147,17 @@ public class Main {
             if (candi[0] == night.number) continue;
             receiveDamage(nights.get(candi[0]));
         }
-//
-        //
+
+
 //        for (int i = 0; i < L; i++) {
 //            System.out.println(Arrays.toString(visited[i]));
 //        }
-//
+////
 //        for (int i = 1; i <= 2; i++) {
 //            System.out.println(i + " " + nights.get(i).damage);
 //        }
+
+//        System.out.println(nights.get(7).k);
     }
 
     static boolean getCandidate(Night night, int d) {
@@ -154,6 +180,7 @@ public class Main {
                 y += dy[d];
                 x += dx[d];
             }
+
             if (!isInRange(y,x)) return false;
         }
 
@@ -185,12 +212,24 @@ public class Main {
         return pairs;
     }
 
-    static boolean canMove(Night night, int d) {
+    static boolean canMove(int num, Night night, int d) {
 
         List<Pair> pairs = getPairs(night, d);
         for (Pair pair : pairs) {
             int ny = pair.y + dy[d];
             int nx = pair.x + dx[d];
+            if (isInRange(ny,nx) && visited[ny][nx] != 0 && !candidates.containsKey(visited[ny][nx])) {
+//                System.out.println("ny = " + ny + " nx = " + nx);
+//                System.out.println("visited[ny][nx] = " + visited[ny][nx]);
+                int distance;
+                if (d == 0 || d == 2) {
+                    distance = Math.abs(nights.get(num).r - ny);
+                } else {
+                    distance = Math.abs(nights.get(num).c - nx);
+                }
+
+                waiting.add(new int[]{visited[ny][nx], distance});
+            }
             if (!isInRange(ny,nx) || board[ny][nx] == 2) return false;
         }
 
@@ -199,9 +238,11 @@ public class Main {
 
     static void move(Night night, int d) {
 
+//        System.out.println("night.number = " + night.number);
         for (int i = night.r; i < night.r + night.h; i++) {
             for (int j = night.c; j < night.c + night.w; j++) {
                 visited[i + dy[d]][j + dx[d]] = night.number;
+//                System.out.println("(i+dy[d]) = " + (i + dy[d]) + " (j+dy[d]) = " + (j+dy[d]));
             }
         }
 
