@@ -189,7 +189,6 @@ public class Main {
         }
 
         for (int i = 1; i < santas.size(); i++) {
-
             Node santa = santas.get(i);
             if (santa.stun || santa.die) continue;
             int dir = getDirection(santa);
@@ -217,7 +216,7 @@ public class Main {
 
             if (collision) {
 
-                if (visited[ny][nx] != 0) {
+                if (visited[ny][nx] != 0 && D != 1) {
                     int firstY = ny;
                     int firstX = nx;
                     int lastY = firstY;
@@ -227,6 +226,8 @@ public class Main {
                         lastX += dx[dir];
                     }
 
+//                    System.out.println("firstY = " + firstY + " firstX = " + firstX);
+//                    System.out.println("lastY = " + lastY + " lastX = " + lastX);
                     while (isInRange(lastY, lastX) && (lastY != firstY || lastX != firstX)) {
 
                         visited[lastY][lastX] = visited[lastY - dy[dir]][lastX - dx[dir]];
