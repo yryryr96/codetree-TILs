@@ -57,7 +57,7 @@ public class Main {
                 ans = 0;
 //                System.out.println("i = " + i);
                 for (int j = 1; j <= N ; j++) {
-                    getParent(0, j, j, parent[j][0], c);
+                    getParent(0, j, j, c);
                 }
 
                 sb.append(ans).append("\n");
@@ -67,7 +67,7 @@ public class Main {
         System.out.println(sb.toString());
     }
 
-    static int getParent(int depth, int start, int current, int next, int target) {
+    static int getParent(int depth, int start, int current, int target) {
 //        System.out.println("start = " + start + " current = " + current + " parent[current] = " + parent[current]);
 //        System.out.println("related[current][parent[current]] = " + related[current][parent[current]]);
 
@@ -75,7 +75,7 @@ public class Main {
         if (parent[current][1] == 1) {
             int n = parent[current][0];
             if (n == target) ans++;
-            getParent(depth+1, start, n, parent[n][0], target);
+            return getParent(depth+1, start, n, target);
         }
         return 0;
     }
