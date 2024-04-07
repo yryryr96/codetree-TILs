@@ -30,7 +30,8 @@ public class Main {
                 }
 
                 for (int j = 1; j <= N; j++) {
-                    authority[j] = stoi(st.nextToken());
+                    int p = stoi(st.nextToken());
+                    authority[j] = Math.min(p, 20);
                 }
             }
 
@@ -88,7 +89,7 @@ public class Main {
     }
 
     static void switchPower(int c, int power) {
-        authority[c] = power;
+        authority[c] = Math.min(power, 20);
     }
 
     static void switchAlarm(int c) {
