@@ -60,6 +60,16 @@ public class Main {
             santas.add(new Node(num, sy-1, sx-1, 0, false, false, 0, 0));
         }
 
+//        System.out.println("roudolf = " + roudolf.y + " roudolf.x = " + roudolf.x);
+//        for (int i = 0; i < N; i++) {
+//            System.out.println(Arrays.toString(visited[i]));
+//        }
+
+        StringBuilder sb = new StringBuilder();
+//        for (int i = 1; i < santas.size(); i++) {
+//            sb.append(santas.get(i).score + " ");
+//        }
+
         int time = 1;
         while (time <= M) {
 
@@ -74,7 +84,7 @@ public class Main {
 //                System.out.println(Arrays.toString(visited[i]));
 //            }
 //
-//            StringBuilder sb = new StringBuilder();
+//            sb = new StringBuilder();
 //            for (int i = 1; i < santas.size(); i++) {
 //                sb.append(santas.get(i).score + " ");
 //            }
@@ -85,7 +95,7 @@ public class Main {
             time++;
         }
 
-        StringBuilder sb = new StringBuilder();
+        sb = new StringBuilder();
         for (int i = 1; i < santas.size(); i++) {
             sb.append(santas.get(i).score + " ");
         }
@@ -158,6 +168,11 @@ public class Main {
                         lastX += dx[dir];
                     }
 
+//                    System.out.println("lastY = " + lastY + " lastX = " + lastX);
+                    if (!isInRange(lastY, lastX)) {
+                        santas.get(visited[lastY - dy[dir]][lastX - dx[dir]]).die = true;
+                    }
+
                     while (isInRange(lastY, lastX) && (lastY != firstY || lastX != firstX)) {
                         visited[lastY][lastX] = visited[lastY - dy[dir]][lastX - dx[dir]];
                         Node s = santas.get(visited[lastY][lastX]);
@@ -226,8 +241,10 @@ public class Main {
                         lastX += dx[dir];
                     }
 
-//                    System.out.println("firstY = " + firstY + " firstX = " + firstX);
-//                    System.out.println("lastY = " + lastY + " lastX = " + lastX);
+                    if (!isInRange(lastY, lastX)) {
+                        santas.get(visited[lastY - dy[dir]][lastX - dx[dir]]).die = true;
+                    }
+
                     while (isInRange(lastY, lastX) && (lastY != firstY || lastX != firstX)) {
 
                         visited[lastY][lastX] = visited[lastY - dy[dir]][lastX - dx[dir]];
