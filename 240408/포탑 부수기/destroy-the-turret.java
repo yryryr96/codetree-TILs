@@ -146,7 +146,7 @@ public class Main {
             q.add(visited[target.y][target.x]);
             affected[target.y][target.x] = true;
 
-            while(true) {
+            while(!q.isEmpty()) {
 
                 Pair now = q.poll();
                 affected[now.y][now.x] = true;
@@ -176,7 +176,7 @@ public class Main {
             else if (nx >= M) nx = 0;
             else if (nx < 0) nx = M-1;
 
-            if (map[ny][nx] != 0) {
+            if (map[ny][nx] > 0) {
                 map[ny][nx] -= (attacker.power/2);
                 affected[ny][nx] = true;
             }
