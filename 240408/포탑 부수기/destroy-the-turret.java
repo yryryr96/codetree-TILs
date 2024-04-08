@@ -1,3 +1,5 @@
+package org.example;
+
 import java.io.*;
 import java.util.*;
 
@@ -62,8 +64,10 @@ public class Main {
     }
 
     static void simulate(int t) {
-        Pair attacker = selectAttacker();
-        Pair target = selectTarget(attacker);
+
+        List<Pair> liveTurrets = findLiveTurrets();
+        Pair attacker = liveTurrets.get(0);
+        Pair target = liveTurrets.get(liveTurrets.size()-1);
 
         affected = new boolean[N][M];
         if (!laserAttack(attacker, target)) throwAttack(attacker, target);
@@ -110,13 +114,9 @@ public class Main {
             }
 
             for (int k = 0; k < 4; k++) {
-                int ny = now.y + dy[k];
-                int nx = now.x + dx[k];
 
-                if (ny >= N) ny = 0;
-                else if (ny < 0) ny = N-1;
-                else if (nx >= M) nx = 0;
-                else if (nx < 0) nx = M-1;
+                int ny = (now.y + dy[k] + N) % N;
+                int nx = (now.x + dx[k] + M) % M;
                 if (map[ny][nx] > 0 && visited[ny][nx] == null) {
                     visited[ny][nx] = new Pair(now.y, now.x);
                     q.add(new Pair(ny,nx));
@@ -151,25 +151,8 @@ public class Main {
         affected[target.y][target.x] = true;
 
         for (int i = 0; i < 8; i++) {
-            int ny = target.y + dy[i];
-            int nx = target.x + dx[i];
-
-            if (ny >= N && nx >= M) {
-                ny = 0; nx = 0;
-            }
-            else if (ny >= N && nx < 0) {
-                ny = 0; nx = M-1;
-            }
-            else if (ny < 0 && nx >= M) {
-                ny = N-1; nx = 0;
-            }
-            else if(ny < 0 && nx < 0) {
-                ny = N-1; nx = M-1;
-            }
-            else if (ny >= N) ny = 0;
-            else if (ny < 0) ny = N-1;
-            else if (nx >= M) nx = 0;
-            else if (nx < 0) nx = M-1;
+            int ny = (target.y + dy[i] + N) % N;
+            int nx = (target.x + dx[i] + M) % M;
             if (ny == attacker.y && nx == attacker.x) continue;
 
             if (map[ny][nx] > 0) {
@@ -179,16 +162,16 @@ public class Main {
         }
     }
 
-    static Pair selectAttacker() {
+    static List<Pair> findLiveTurrets() {
 
-        List<Pair> attackers = new ArrayList<>();
+        List<Pair> liveTurrets = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (map[i][j] > 0) attackers.add(new Pair(i,j, map[i][j]));
+                if (map[i][j] > 0) liveTurrets.add(new Pair(i,j, map[i][j]));
             }
         }
 
-        Collections.sort(attackers, (a,b) -> {
+        Collections.sort(liveTurrets, (a,b) -> {
             if (map[a.y][a.x] != map[b.y][b.x]) return map[a.y][a.x] - map[b.y][b.x];
             else {
                 if (turn[a.y][a.x] != turn[b.y][b.x]) return turn[b.y][b.x] - turn[a.y][a.x];
@@ -201,37 +184,12 @@ public class Main {
             }
         });
 
-        Pair attacker = attackers.get(0);
+        Pair attacker = liveTurrets.get(0);
         map[attacker.y][attacker.x] += (N+M);
         attacker.power += (N+M);
 
-        return attacker;
-    }
-
-    static Pair selectTarget(Pair attacker) {
-
-        List<Pair> targets = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (i == attacker.y && j == attacker.x) continue;
-                if (map[i][j] > 0) targets.add(new Pair(i,j, map[i][j]));
-            }
-        }
-
-        Collections.sort(targets, (a,b) -> {
-            if (map[a.y][a.x] != map[b.y][b.x]) return map[b.y][b.x] -  map[a.y][a.x];
-            else {
-                if (turn[a.y][a.x] != turn[b.y][b.x]) return turn[a.y][a.x] - turn[b.y][b.x];
-                else {
-                    if ((a.y + a.x) != (b.y + b.x)) return (a.y + a.x) - (b.y + b.x);
-                    else {
-                        return a.x - b.x;
-                    }
-                }
-            }
-        });
-
-        return targets.get(0);
+        liveTurrets.set(0, attacker);
+        return liveTurrets;
     }
 
     static int stoi(String s) {
