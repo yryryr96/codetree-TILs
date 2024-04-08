@@ -171,7 +171,19 @@ public class Main {
             int ny = target.y + dy[i];
             int nx = target.x + dx[i];
 
-            if (ny >= N) ny = 0;
+            if (ny >= N && nx >= M) {
+                ny = 0; nx = 0;
+            }
+            else if (ny >= N && nx < 0) {
+                ny = 0; nx = M-1;
+            }
+            else if (ny < 0 && nx >= M) {
+                ny = N-1; nx = 0;
+            }
+            else if(ny < 0 && nx < 0) {
+                ny = N-1; nx = M-1;
+            }
+            else if (ny >= N) ny = 0;
             else if (ny < 0) ny = N-1;
             else if (nx >= M) nx = 0;
             else if (nx < 0) nx = M-1;
