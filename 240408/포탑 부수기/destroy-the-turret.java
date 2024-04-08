@@ -74,7 +74,8 @@ public class Main {
         Pair attacker = selectAttacker();
         Pair target = selectTarget(attacker);
 
-//        System.out.println("attacker.y = " + attacker.y + " attacker.x = " + attacker.x);
+//        System.out.println("attacker.y = " + attacker.y + " attacker.x = " + attacker.x + " power = " + attacker.power);
+//        System.out.println("target.y = " + target.y + " target.x = " + target.x);
         affected = new boolean[N][M];
         if (!laserAttack(attacker, target)) throwAttack(attacker, target);
         turn[attacker.y][attacker.x] = t;
@@ -90,6 +91,7 @@ public class Main {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (map[i][j] > 0 && !affected[i][j]) map[i][j]++;
+                else if (map[i][j] < 0) map[i][j] = 0;
             }
         }
     }
@@ -141,7 +143,7 @@ public class Main {
         }
 
         if (temp) {
-
+//            System.out.println("laser");
             q.clear();
             q.add(visited[target.y][target.x]);
             affected[target.y][target.x] = true;
@@ -150,7 +152,7 @@ public class Main {
 
                 Pair now = q.poll();
                 affected[now.y][now.x] = true;
-                if (now.y == attacker.y && now.x == attacker.x) break;
+                if (now.y == attacker.y && now.x == attacker.x) continue;
                 map[now.y][now.x] -= (int) attacker.power/2;
                 Pair before = visited[now.y][now.x];
                 q.add(before);
@@ -162,6 +164,7 @@ public class Main {
 
     static void throwAttack(Pair attacker, Pair target) {
 
+//        System.out.println("throw");
         map[target.y][target.x] -= attacker.power;
 
         affected[attacker.y][attacker.x] = true;
@@ -187,9 +190,11 @@ public class Main {
             else if (ny < 0) ny = N-1;
             else if (nx >= M) nx = 0;
             else if (nx < 0) nx = M-1;
+            if (ny == attacker.y && nx == attacker.x) continue;
 
             if (map[ny][nx] > 0) {
-                map[ny][nx] -= (attacker.power/2);
+//                System.out.println("ny = " + ny + " nx = " + nx);
+                map[ny][nx] -= (int) (attacker.power/2);
                 affected[ny][nx] = true;
             }
         }
@@ -224,12 +229,12 @@ public class Main {
         return attacker;
     }
 
-    static Pair selectTarget(Pair p) {
+    static Pair selectTarget(Pair attacker) {
 
         List<Pair> targets = new ArrayList<>();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (i == p.y && j == p.x) continue;
+                if (i == attacker.y && j == attacker.x) continue;
                 if (map[i][j] > 0) targets.add(new Pair(i,j, map[i][j]));
             }
         }
@@ -247,6 +252,9 @@ public class Main {
             }
         });
 
+//        for (int i = 0; i < targets.size(); i++) {
+//            System.out.println("targets.get(i).power = " + targets.get(i).power);
+//        }
         return targets.get(0);
     }
 
