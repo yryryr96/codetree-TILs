@@ -27,9 +27,9 @@ public class Main {
 
         n = stoi(st.nextToken());
         m = stoi(st.nextToken());
-        markets = new Pair[n+1];
+        markets = new Pair[m+1];
         board = new int[n][n];
-        isLive = new boolean[n+1];
+        isLive = new boolean[m+1];
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -74,7 +74,7 @@ public class Main {
     }
 
     static void initMarket() {
-        for (int i = 1; i <= n ; i++) {
+        for (int i = 1; i <= m ; i++) {
             if (!isLive[i]) continue;
 
             Pair person = people.get(i);
@@ -89,7 +89,7 @@ public class Main {
 
     static void move() {
 
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i <= m; i++) {
             if (!isLive[i]) continue;
             Pair person = people.get(i);
 
