@@ -49,7 +49,6 @@ public class Main {
         while (true) {
             simulate(time);
             if (outCnt == m) break;
-//            if (time == 5) break;
             time++;
         }
 
@@ -60,6 +59,7 @@ public class Main {
 
 //        System.out.println("time = " + time);
         move();
+        initMarket();
         if (time <= m) {
             Pair baseCamp = findBaseCamp(time);
             people.put(time, new Pair(baseCamp.y, baseCamp.x));
@@ -68,8 +68,10 @@ public class Main {
         }
 
 //        System.out.println(Arrays.toString(isLive));
-        initMarket();
 
+//        for (int i = 0; i < n; i++) {
+//            System.out.println(Arrays.toString(board[i]));
+//        }
 //        if (time >= 2) System.out.println(people.get(2).y + " " + people.get(2).x);
     }
 
@@ -98,9 +100,12 @@ public class Main {
             Pair[][] visited = new Pair[n][n];
             visited[person.y][person.x] = person;
 
+//            System.out.println(person.y + " " + person.x);
+//            System.out.println(markets[i].y + " " + markets[i].x);
             while (!q.isEmpty()) {
 
                 Pair now = q.poll();
+//                System.out.println("now.y = " + now.y + " now.x = " + now.x);
                 if (now.y == markets[i].y && now.x == markets[i].x) {
                     break;
                 }
