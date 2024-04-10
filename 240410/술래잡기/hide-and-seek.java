@@ -32,6 +32,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
+		System.setIn(new FileInputStream("src/eclipse/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
@@ -80,7 +81,7 @@ public class Main {
 		
 		// 도망자 움직임
 		runnerMove();
-		
+
 		// 술래 이동
 		masterMove(time);
 	}
@@ -105,10 +106,11 @@ public class Main {
 			int ny = master.y + dy[master.d]*i;
 			int nx = master.x + dx[master.d]*i;
 			if (!inRange(ny,nx) || tree[ny][nx]) continue;
-//			System.out.println(ny + " " + nx);
+
 			canSee.add(new Pair(ny,nx));
 		}
 		
+	
 		int cnt = 0;
 		// 범인 잡기
 		for (Pair runner : runners) {
@@ -128,7 +130,6 @@ public class Main {
 	// 도망자 이동
 	static void runnerMove() {
 		
-		int cnt = 0;
 		for (Pair runner : runners) {
 			
 			if (runner.isOut) continue;
@@ -150,8 +151,8 @@ public class Main {
 				runner.d = (runner.d + 2) % 4;
 				ny = runner.y + dy[runner.d];
 				nx = runner.x + dx[runner.d];
-				
-				if (ny != master.y || nx != master.x) runner.y = ny; runner.x = nx;
+				if (ny == master.y && nx == master.x) continue;
+				runner.y = ny; runner.x = nx;
 			}
 		}
 	}
