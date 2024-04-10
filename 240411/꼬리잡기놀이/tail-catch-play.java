@@ -49,8 +49,16 @@ public class Main {
 		
 		initGroup();
 		
+
+		
 		for (int i = 1; i <= k; i++) {
 			simulate(i);
+			
+//			for (int j = 0; j < n; j++) {
+//				System.out.println(Arrays.toString(map[j]));
+//			}
+//			System.out.println("============");
+			
 		}
 
 		System.out.println(ans);
@@ -64,7 +72,8 @@ public class Main {
 	
 	static void attack(int time) {
 		
-		int t = time % (time*4*n);
+		int t = time % (4*n);
+
 		int si = 0, sj = 0, d = -1;
 		if (0 < t && t <= n) {
 			si = t - 1;
@@ -83,11 +92,12 @@ public class Main {
 			
 			si = 0;
 			sj = t == 0 ? si = 0 : n - 1 - (t - 3*n - 1);
+			d = 2;
 		}
-		
+
 		int teamNum = -1;
 		while (inRange(si,sj)) {
-			
+
 			if(map[si][sj] != 4 && map[si][sj] != 0) {
 				teamNum = teamNumber[si][sj];
 				List<Pair> team = teams.get(teamNum);
@@ -106,6 +116,7 @@ public class Main {
 			sj += dx[d];
 		}
 		
+
 		if (teamNum != -1) reverseTeam(teamNum);
 	}
 	
@@ -127,36 +138,60 @@ public class Main {
 		for (int i = 1; i <= m; i++) {
 //			System.out.println("i = " + i);
 			List<Pair> team = teams.get(i);
+			boolean temp = true;
+			Pair head = team.get(team.size()-1);
+			Pair tail = team.get(0);
+			if (getDistance(head.y, head.x, tail.y, tail.x) > 1) {temp = false;}
+			
 			for (int j = team.size() - 1; j >= 0; j--) {
 				Pair now = team.get(j);
 //				System.out.println("now = " + now.y + " " + now.x + " d = " + now.d);
-				int ny = now.y + dy[now.d];
-				int nx = now.x + dx[now.d];
-				// 범위 안에 있으면
-				if (inRange(ny, nx) && map[ny][nx] != 0) {
-					map[now.y][now.x] = 4;
-					now.y = ny;
-					now.x = nx;
-					map[ny][nx] = now.v;
+	
+				if (j == team.size() - 1) {
+					for (int k = 0; k < 4; k++) {
+						int ny = now.y + dy[k];
+						int nx = now.x + dx[k];
+						if (!inRange(ny,nx)) continue;
+						if (map[ny][nx] != 0 && map[ny][nx] != 2) {
+							map[now.y][now.x] = -1;
+							now.y = ny;
+							now.x = nx;
+							map[ny][nx] = now.v;
+							break;
+						}
+					}
+				} else if (j == 0) {
 					
+					for (int k = 0; k < 4; k++) {
+						int ny = now.y + dy[k];
+						int nx = now.x + dx[k];
+						if(inRange(ny,nx) && map[ny][nx] == -1) {
+							map[ny][nx] = now.v;
+							if (!temp) {
+								map[now.y][now.x] = 4;
+							}
+							
+							now.y = ny;
+							now.x = nx;
+							break;
+						}
+					}
 				} else {
 					for (int k = 0; k < 4; k++) {
-						ny = now.y + dy[k];
-						nx = now.x + dx[k];
-						if (!inRange(ny,nx) || map[ny][nx] != 4) continue;
-						map[now.y][now.x] = 4;
-						now.y = ny;
-						now.x = nx;
-						now.d = k;
-						map[ny][nx] = now.v;
-						
-						break;
+						int ny = now.y + dy[k];
+						int nx = now.x + dx[k];
+						if(inRange(ny,nx) && map[ny][nx] == -1) {
+
+							map[now.y][now.x] = -1;
+							now.y = ny;
+							now.x = nx;
+							map[ny][nx] = now.v;
+							break;
+						}
 					}
 				}
-
-//				System.out.println("next = " + ny + " " + nx);
-
 			}
+		
 		}
 	}
 	
@@ -257,6 +292,10 @@ public class Main {
 				teamNumber[ny][nx] = team;
 			}
 		}
+	}
+	
+	static int getDistance(int y1, int x1, int y2, int x2) {
+		return (int) Math.abs(x1-x2) + Math.abs(y1-y2);
 	}
 	
 	static boolean inRange(int y, int x) {
