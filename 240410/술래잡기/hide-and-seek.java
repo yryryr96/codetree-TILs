@@ -31,7 +31,7 @@ public class Main {
 	static int outCnt = 0;
 	
 	public static void main(String[] args) throws IOException {
-
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
@@ -83,7 +83,6 @@ public class Main {
 		
 		// 술래 이동
 		masterMove(time);
-//		System.out.println(" mas.y = " + master.y + " mas.x = " + master.x + " mas.d = " + master.d);
 	}
 	
 	// 술래 이동
@@ -98,7 +97,7 @@ public class Main {
 		master.x = next.x;
 		int d = getDirection(curWay);
 		master.d = d;
-		
+
 		List<Pair> canSee = new ArrayList<>();
 		if (!tree[master.y][master.x]) canSee.add(new Pair(master.y, master.x));
 		
@@ -106,6 +105,7 @@ public class Main {
 			int ny = master.y + dy[master.d]*i;
 			int nx = master.x + dx[master.d]*i;
 			if (!inRange(ny,nx) || tree[ny][nx]) continue;
+//			System.out.println(ny + " " + nx);
 			canSee.add(new Pair(ny,nx));
 		}
 		
@@ -128,27 +128,30 @@ public class Main {
 	// 도망자 이동
 	static void runnerMove() {
 		
+		int cnt = 0;
 		for (Pair runner : runners) {
 			
 			if (runner.isOut) continue;
 			if (getDistance(runner.y, runner.x, master.y, master.x) > 3) continue;
-			
+
 			int ny = runner.y + dy[runner.d];
 			int nx = runner.x + dx[runner.d];
 			
 			// 격자 내
 			if (inRange(ny, nx)) {
-				  
+				
+
 				if (ny == master.y && nx == master.x) continue;
 				else runner.y = ny; runner.x = nx;
 			} 
 			// 격자 외
 			else {
-				
+
 				runner.d = (runner.d + 2) % 4;
 				ny = runner.y + dy[runner.d];
 				nx = runner.x + dx[runner.d];
-				if (ny != master.y && nx != master.x) runner.y = ny; runner.x = nx;
+				
+				if (ny != master.y || nx != master.x) runner.y = ny; runner.x = nx;
 			}
 		}
 	}
@@ -158,8 +161,7 @@ public class Main {
 		Pair next = curWay[master.y][master.x];
 		int ddy = next.y - master.y;
 		int ddx = next.x - master.x;
-//		System.out.println(" mas.y = " + master.y + " mas.x = " + master.x + " mas.d = " + master.d);
-//		System.out.println("next = " + next.y + " " + next.x);
+
 		int d = -1;
 		for (int i = 0; i < 4; i++) {
 			if (ddy == dy[i] && ddx == dx[i]) {
@@ -206,7 +208,7 @@ public class Main {
 			Pair now = q.poll();
 			if (now.y == 0 && now.x == 0) break; 
 			Pair next = way[now.y][now.x];
-//			System.out.println("next.y = " + next.y + " next.x = " + next.x);
+
 			reverseWay[next.y][next.x] = new Pair(now.y, now.x, now.d);
 			q.add(new Pair(next.y, next.x, next.d));
 		}
