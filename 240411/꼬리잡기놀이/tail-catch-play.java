@@ -30,8 +30,7 @@ public class Main {
 	static int ans = 0;
 	
 	public static void main(String[] args) throws IOException {
-		
-		// System.setIn(new FileInputStream("src/eclipse/input.txt"));
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
@@ -49,7 +48,6 @@ public class Main {
 		}
 		
 		initGroup();
-		
 		
 		for (int i = 1; i <= k; i++) {
 			simulate(i);
@@ -123,19 +121,7 @@ public class Main {
 		
 		teams.put(teamNumber, next);
 	}
-	
-//	static void initVisit() {
-//		
-//		visited = new boolean[n][n];
-//		for (int i = 1; i <= m; i++) {
-//			List<Pair> team = teams.get(i);
-//			for (int j = 0; j < team.size(); j++) {
-//				Pair p = team.get(j);
-//				visited[p.y][p.x] = true; 
-//			}
-//		}
-//	}
-	
+		
 	static void move() {
 		
 		for (int i = 1; i <= m; i++) {
@@ -206,7 +192,6 @@ public class Main {
 		Pair start = new Pair(y,x,d,3,team);
 		q.add(start);
 		visited[y][x] = true;
-		teamNumber[y][x] = team;
 		List<Pair> tq = new ArrayList<>();
 		
 		int headY = 0, headX = 0;
@@ -219,7 +204,6 @@ public class Main {
 				int nx = now.x + dx[k];
 				if (!inRange(ny, nx) || visited[ny][nx] || map[ny][nx] == 0 || map[ny][nx] == 4) continue;
 				if(map[ny][nx] == 2) {
-					teamNumber[ny][nx] = team;
 					tq.add(new Pair(now.y, now.x, k, map[now.y][now.x], team));
 					q.add(new Pair(ny, nx));
 					visited[ny][nx] = true;
@@ -260,13 +244,13 @@ public class Main {
 		q.add(new Pair(y,x));
 		visit[y][x] = true;
 		teamNumber[y][x] = team;
-		
-		while(q.isEmpty()) {
+		while(!q.isEmpty()) {
 			
 			Pair now = q.poll();
 			for (int i = 0; i < 4; i++) {
 				int ny = now.y + dy[i];
 				int nx = now.x + dx[i];
+//				System.out.println(ny + " " + nx);
 				if (!inRange(ny,nx) || map[ny][nx] == 0 || visit[ny][nx]) continue;
 				visit[ny][nx] = true;
 				q.add(new Pair(ny,nx));
