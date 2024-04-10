@@ -150,7 +150,7 @@ public class Main {
 				runner.d = (runner.d + 2) % 4;
 				ny = runner.y + dy[runner.d];
 				nx = runner.x + dx[runner.d];
-				if (ny != master.y && nx != master.x) {
+				if (ny != master.y || nx != master.x) {
                     runner.y = ny; runner.x = nx;
                 }
 			
