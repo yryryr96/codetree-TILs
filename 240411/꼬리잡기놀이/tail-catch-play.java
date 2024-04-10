@@ -9,10 +9,9 @@ public class Main {
 	static int[] dx = {0,1,0,-1};
 	static class Pair {
 		int y,x,d,team,v;
-		Pair (int y, int x, int d, int v, int team) {
+		Pair (int y, int x, int v, int team) {
 			this.y = y;
 			this.x = x;
-			this.d = d;
 			this.v = v;
 			this.team = team;
 		}
@@ -50,14 +49,8 @@ public class Main {
 		initGroup();
 		
 
-		
 		for (int i = 1; i <= k; i++) {
 			simulate(i);
-			
-//			for (int j = 0; j < n; j++) {
-//				System.out.println(Arrays.toString(map[j]));
-//			}
-//			System.out.println("============");
 			
 		}
 
@@ -127,7 +120,7 @@ public class Main {
 		
 		for (int i = team.size() - 1; i >= 0; i--) {
 			Pair person = team.get(i);
-			next.add(new Pair(person.y, person.x, (person.d + 2)%4, person.v, person.team));
+			next.add(new Pair(person.y, person.x, person.v, person.team));
 		}
 		
 		teams.put(teamNumber, next);
@@ -146,12 +139,13 @@ public class Main {
 			for (int j = team.size() - 1; j >= 0; j--) {
 				Pair now = team.get(j);
 //				System.out.println("now = " + now.y + " " + now.x + " d = " + now.d);
-	
-				if (j == team.size() - 1) {
-					for (int k = 0; k < 4; k++) {
-						int ny = now.y + dy[k];
-						int nx = now.x + dx[k];
-						if (!inRange(ny,nx)) continue;
+				for (int k = 0; k < 4; k++) {
+					int ny = now.y + dy[k];
+					int nx = now.x + dx[k];
+					
+					if (!inRange(ny,nx)) continue;
+					if (j == team.size() - 1) {
+						
 						if (map[ny][nx] != 0 && map[ny][nx] != 2) {
 							map[now.y][now.x] = -1;
 							now.y = ny;
@@ -160,12 +154,8 @@ public class Main {
 							break;
 						}
 					}
-				} else if (j == 0) {
-					
-					for (int k = 0; k < 4; k++) {
-						int ny = now.y + dy[k];
-						int nx = now.x + dx[k];
-						if(inRange(ny,nx) && map[ny][nx] == -1) {
+					else if (j == 0) {
+						if(map[ny][nx] == -1) {
 							map[ny][nx] = now.v;
 							if (!temp) {
 								map[now.y][now.x] = 4;
@@ -176,11 +166,8 @@ public class Main {
 							break;
 						}
 					}
-				} else {
-					for (int k = 0; k < 4; k++) {
-						int ny = now.y + dy[k];
-						int nx = now.x + dx[k];
-						if(inRange(ny,nx) && map[ny][nx] == -1) {
+					else {
+						if(map[ny][nx] == -1) {
 
 							map[now.y][now.x] = -1;
 							now.y = ny;
@@ -191,7 +178,6 @@ public class Main {
 					}
 				}
 			}
-		
 		}
 	}
 	
@@ -224,7 +210,7 @@ public class Main {
 		
 		
 		Queue<Pair> q = new LinkedList<>();
-		Pair start = new Pair(y,x,d,3,team);
+		Pair start = new Pair(y,x,3,team);
 		q.add(start);
 		visited[y][x] = true;
 		List<Pair> tq = new ArrayList<>();
@@ -239,7 +225,7 @@ public class Main {
 				int nx = now.x + dx[k];
 				if (!inRange(ny, nx) || visited[ny][nx] || map[ny][nx] == 0 || map[ny][nx] == 4) continue;
 				if(map[ny][nx] == 2) {
-					tq.add(new Pair(now.y, now.x, k, map[now.y][now.x], team));
+					tq.add(new Pair(now.y, now.x, map[now.y][now.x], team));
 					q.add(new Pair(ny, nx));
 					visited[ny][nx] = true;
 				} 
@@ -247,7 +233,7 @@ public class Main {
 				else if (map[ny][nx] == 1) {
 					if (now.y == start.y && now.x == start.x) continue;
 					else {
-						tq.add(new Pair(now.y, now.x, k, map[now.y][now.x], team));
+						tq.add(new Pair(now.y, now.x, map[now.y][now.x], team));
 						headY = ny;
 						headX = nx;
 						break;
@@ -263,7 +249,7 @@ public class Main {
 			int nx = headX + dx[i];
 			if(!inRange(ny,nx)) continue;
 			if(map[ny][nx] == 4 || map[ny][nx] == 3) {
-				tq.add(new Pair(headY, headX, i, 1, team));
+				tq.add(new Pair(headY, headX, 1, team));
 				break;
 			}
 		}
