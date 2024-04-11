@@ -20,9 +20,10 @@ public class Main {
 	static int groupCnt;
 	static List<int[]> combinations = new ArrayList<>();
 	static HashMap<Integer, Pair> startPoint = new HashMap<>();
+	static List<Pair> starting;
 	
 	public static void main(String[] args) throws IOException {
-
+		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
@@ -35,6 +36,7 @@ public class Main {
 			}
 		}
 		
+		starting = getSquareStartPoint();
 		for (int i = 1; i <= 4; i++) {
 			simulate();
 		}
@@ -60,7 +62,6 @@ public class Main {
 		}
 		
 		// 회전 시키기
-		List<Pair> starting = getSquareStartPoint();
 		for (Pair start : starting) {
 			squareRotate(start.y, start.x);
 		}
@@ -100,46 +101,32 @@ public class Main {
 	}
 	
 	static void plusRotate() {
+				
+		List<int[]> point = new ArrayList<>();
 		
-		int[][] temp = new int[n][n];
-		
-		for (int i = 0; i < n; i++ ) {
-			for (int j = 0; j < n; j++) {
-				temp[n-1-j][i] = board[i][j];
-			}
+		for (int i = 0; i < n; i++) {
+			point.add(new int[] {n-1-n/2, i, board[i][n/2]});
+			point.add(new int[] {n-1-i, n/2, board[n/2][i]});
 		}
 		
 		// 대입
-		for (int i = 0; i < n; i++) {
-			board[i][n/2] = temp[i][n/2];
-			board[n/2][i] = temp[n/2][i];
+		for (int i = 0; i < point.size(); i++) {
+			int[] p = point.get(i);
+			board[p[0]][p[1]] = p[2];
 		}
 	}
 	
 	static int getScore(int group1, int group2) {
 		
-		boolean[][] visited = new boolean[n][n];
-		Queue<Pair> q = new LinkedList<>();
-		Pair start = startPoint.get(group1);
-		
-		q.add(start);
-		visited[start.y][start.x] = true;
-		int attached = 0;
-		
-		while (!q.isEmpty()) {
-			
-			Pair now = q.poll();
-			
-			for (int k = 0; k < 4; k++) {
-				int ny = now.y + dy[k];
-				int nx = now.x + dx[k];
-				if(!inRange(ny,nx) || visited[ny][nx]) continue;
-				if(groupVisited[ny][nx] == group1) {
-					visited[ny][nx] = true;
-					q.add(new Pair(ny,nx));
-				}
-				else if(groupVisited[ny][nx] == group2) {
-					attached++;
+		int attached = 0;	
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if(groupVisited[i][j] != group1) {continue;}
+				for (int k = 0; k < 4; k++) {
+					int ny = i + dy[k];
+					int nx = j + dx[k];
+					if (!inRange(ny,nx)) continue;
+					if (groupVisited[ny][nx] == group2) attached++;
 				}
 			}
 		}
