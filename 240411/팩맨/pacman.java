@@ -103,6 +103,9 @@ public class Main {
 		//팩맨 이동
 		packManMove(time);
 		
+		//시체 갱신
+		initDieMonster(time);
+		
 		// 몬스터 복제 완성
 		duplicateMonsters();
 	}
@@ -125,7 +128,7 @@ public class Main {
 			int nx = monster.x + mx[monster.d];
 			// time - egg.t > 2 -> 움직일 수 있다.
 			// 격자 외, 팩맨, 시체
-			if (!inRange(ny,nx) || (ny == packMan.y && nx == packMan.x) || !checkDieMonster(ny,nx,time)) {
+			if (!inRange(ny,nx) || (ny == packMan.y && nx == packMan.x) || !checkDieMonster(ny,nx)) {
 				
 				int k = 1;
 				while (k < 8) {
@@ -133,7 +136,7 @@ public class Main {
 					ny = monster.y + my[(monster.d + k) % 8];
 					nx = monster.x + mx[(monster.d + k) % 8];
 					
-					if (inRange(ny, nx) && (ny != packMan.y || nx != packMan.x) && checkDieMonster(ny, nx, time)) {
+					if (inRange(ny, nx) && (ny != packMan.y || nx != packMan.x) && checkDieMonster(ny, nx)) {
 						monster.y = ny;
 						monster.x = nx;
 						monster.d = (monster.d + k) % 8;
@@ -175,6 +178,23 @@ public class Main {
 			if (monster.y == y && monster.x == x) {
 				monster.isLive = false;
 				dieMonsters.get(y).get(x).add(new Pair(time));
+			}
+		}
+	}
+	
+	static void initDieMonster(int time) {
+		
+		
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				List<Pair> dies = dieMonsters.get(i).get(j);
+				List<Pair> nd = new ArrayList<>();
+				for (Pair m : dies) {
+					if (time - m.t >= 2) continue;
+					nd.add(m);
+				}
+				
+				dies = nd;
 			}
 		}
 	}
@@ -236,14 +256,9 @@ public class Main {
 		}
 	}
 	
-	static boolean checkDieMonster(int y, int x, int time) {
-		
-		List<Pair> dies = dieMonsters.get(y).get(x);
-		for (Pair m : dies) {
-			if (time - m.t <= 2) return false; 
-		}
-		
-		return true;
+	static boolean checkDieMonster(int y, int x) {
+				
+		return dieMonsters.get(y).get(x).size() == 0;
 	}
 	
 	static boolean inRange(int y, int x) {
