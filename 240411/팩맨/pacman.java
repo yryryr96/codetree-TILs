@@ -72,6 +72,8 @@ public class Main {
 		
 		for (int i = 1; i <= t; i++) {
 			 simulate(i);
+//			 System.out.println(" time = " + i + " " + packMan.y + " " + packMan.x);
+//			 System.out.println(maxValue);
 		}
 		
 		System.out.println(getAnswer());
@@ -158,11 +160,12 @@ public class Main {
 		 dfs(0,packMan.y, packMan.x, 0,new ArrayList<>());
 		 
 		 for (Integer d : way) {
-			 
+	
 			 packMan.y = packMan.y + dy[d];
 			 packMan.x = packMan.x + dx[d];
 			 killMonster(packMan.y, packMan.x, time);
 		 }
+		 
 	}
 	
 	static void killMonster(int y, int x, int time) {
@@ -198,24 +201,29 @@ public class Main {
 			int ny = y + dy[i];
 			int nx = x + dx[i];
 			
-			if (inRange(ny,nx) && !visited[ny][nx]) {
+			if (inRange(ny,nx)) {
+						
 				int c = 0;
 				for (Pair m : monsters) {
 					if (!m.isLive) continue;
 					if (m.y == ny && m.x == nx) c++;
 				}
 				
-
 				List<Integer> directions = new ArrayList<>();
 				for (Integer dir : d) {
 					directions.add(dir);
 				}
 				directions.add(i);
-				
-//				System.out.println("depth = " + depth + " ny = " + ny + " nx = " + nx + " c = " + c);
-				visited[ny][nx] = true;
-				dfs(depth + 1, ny, nx, cnt + c, directions);
-				visited[ny][nx] = false;
+					
+				if (visited[ny][nx] || (ny == packMan.y && nx == packMan.x)) {
+					dfs(depth + 1, ny, nx, cnt, directions);
+				}
+				else {
+//					System.out.println("depth = " + depth + " ny = " + ny + " nx = " + nx + " c = " + c);
+					visited[ny][nx] = true;
+					dfs(depth + 1, ny, nx, cnt + c, directions);
+					visited[ny][nx] = false;
+				}
 			}
 		}
 	}
@@ -232,7 +240,7 @@ public class Main {
 		
 		List<Pair> dies = dieMonsters.get(y).get(x);
 		for (Pair m : dies) {
-			if (time - m.t <= 3) return false; 
+			if (time - m.t <= 2) return false; 
 		}
 		
 		return true;
