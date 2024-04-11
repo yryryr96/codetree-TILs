@@ -166,14 +166,16 @@ public class Main {
 		maxValue = 0;
 		// 순열 dfs
 		// 칸수, 마리수, 방향
-		 dfs(0,packMan.y, packMan.x, 0,new ArrayList<>());
+		way = new ArrayList<>();
+		dfs(0,packMan.y, packMan.x, 0,new ArrayList<>());
 		 
-		 for (Integer d : way) {
+		 
+		for (Integer d : way) {
 	
-			 packMan.y = packMan.y + dy[d];
-			 packMan.x = packMan.x + dx[d];
-			 killMonster(packMan.y, packMan.x, time);
-		 }
+			packMan.y = packMan.y + dy[d];
+			packMan.x = packMan.x + dx[d];
+			killMonster(packMan.y, packMan.x, time);
+		}
 		 
 	}
 	
@@ -220,6 +222,15 @@ public class Main {
 				maxValue = cnt;
 			}
 			
+			else if (maxValue == 0 && way.size() == 0) {
+				
+				for (Integer dir : d) {
+					way.add(dir);
+				}
+				
+				return;
+			}
+			
 			return;
 		}
 		
@@ -235,7 +246,7 @@ public class Main {
 				}
 				directions.add(i);
 					
-				if (visited[ny][nx] || (ny == packMan.y && nx == packMan.x)) {
+				if (visited[ny][nx]) {
 					dfs(depth + 1, ny, nx, cnt, directions);
 				}
 				else {
