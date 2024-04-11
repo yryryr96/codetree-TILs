@@ -74,6 +74,12 @@ public class Main {
 			 simulate(i);
 //			 System.out.println(" time = " + i + " " + packMan.y + " " + packMan.x);
 //			 System.out.println(maxValue);
+//			 
+//			 for (int j = 0; j < monsters.size(); j++) {
+//				 if (monsters.get(j).isLive) {
+//					 System.out.println(monsters.get(j).y + " " + monsters.get(j).x);
+//				 }
+//			 }
 		}
 		
 		System.out.println(getAnswer());
@@ -126,7 +132,7 @@ public class Main {
 			if (!monster.isLive) continue;
 			int ny = monster.y + my[monster.d];
 			int nx = monster.x + mx[monster.d];
-			// time - egg.t > 2 -> 움직일 수 있다.
+
 			// 격자 외, 팩맨, 시체
 			if (!inRange(ny,nx) || (ny == packMan.y && nx == packMan.x) || !checkDieMonster(ny,nx)) {
 				
@@ -145,11 +151,11 @@ public class Main {
 					
 					k++;
 				}
-			} else {
+			} else {			
 				monster.y = ny;
 				monster.x = nx;
 			}
-
+			
 		}
 	}
 	
@@ -177,13 +183,13 @@ public class Main {
 			if (!monster.isLive) continue;
 			if (monster.y == y && monster.x == x) {
 				monster.isLive = false;
+				
 				dieMonsters.get(y).get(x).add(new Pair(time));
 			}
 		}
 	}
 	
 	static void initDieMonster(int time) {
-		
 		
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
@@ -194,7 +200,7 @@ public class Main {
 					nd.add(m);
 				}
 				
-				dies = nd;
+				dieMonsters.get(i).set(j, nd);
 			}
 		}
 	}
@@ -222,12 +228,6 @@ public class Main {
 			int nx = x + dx[i];
 			
 			if (inRange(ny,nx)) {
-						
-				int c = 0;
-				for (Pair m : monsters) {
-					if (!m.isLive) continue;
-					if (m.y == ny && m.x == nx) c++;
-				}
 				
 				List<Integer> directions = new ArrayList<>();
 				for (Integer dir : d) {
@@ -239,7 +239,13 @@ public class Main {
 					dfs(depth + 1, ny, nx, cnt, directions);
 				}
 				else {
-//					System.out.println("depth = " + depth + " ny = " + ny + " nx = " + nx + " c = " + c);
+					
+					int c = 0;
+					for (Pair m : monsters) {
+						if (!m.isLive) continue;
+						if (m.y == ny && m.x == nx) c++;
+					}
+					
 					visited[ny][nx] = true;
 					dfs(depth + 1, ny, nx, cnt + c, directions);
 					visited[ny][nx] = false;
