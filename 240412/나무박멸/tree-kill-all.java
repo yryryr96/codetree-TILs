@@ -164,6 +164,8 @@ public class Main {
 			}
 		}
 		
+		if (drugList.size() == 0) return;
+		
 		Collections.sort(drugList, (a,b) -> {
 			if (a.cnt != b.cnt) return b.cnt - a.cnt;
 			else {
