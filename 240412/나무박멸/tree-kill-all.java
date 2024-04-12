@@ -33,7 +33,7 @@ public class Main {
 	static List<Pair> tempList = new ArrayList<>();
 	
 	public static void main(String[] args) throws IOException {
-	
+
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
@@ -70,6 +70,7 @@ public class Main {
 		
 		// 번식
 		spreadSuccess();
+//		printBoard();
 		
 		// 박멸
 		goDrug();
@@ -173,7 +174,8 @@ public class Main {
 		
 		Pair target = drugList.get(0);
 		int v = board[target.y][target.x];
-		drug[target.y][target.x] = c + 1; 
+		drug[target.y][target.x] = c + 1;
+		board[target.y][target.x] = 0; 
 		for (int d = 0; d < 4; d++) {
 			for (int l = 1; l <= k; l++) {
 				int ny = target.y + ddy[d]*l;
