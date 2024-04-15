@@ -115,6 +115,7 @@ public class Main {
             Pair now = q.poll();
             if (maxScore < now.y) {
                 maxScore = now.y;
+                if (maxScore == R+2) break;
             }
 
             for (int i = 0; i < 4; i++) {
