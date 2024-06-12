@@ -1,5 +1,3 @@
-package eclipse;
-
 import java.util.*;
 import java.io.*;
 
@@ -13,7 +11,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		System.setIn(new FileInputStream("src/eclipse/input.txt"));
+		// System.setIn(new FileInputStream("src/eclipse/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
