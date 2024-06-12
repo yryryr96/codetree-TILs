@@ -1,3 +1,5 @@
+package eclipse;
+
 import java.util.*;
 import java.io.*;
 
@@ -11,7 +13,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		// System.setIn(new FileInputStream("src/eclipse/input.txt"));
+		System.setIn(new FileInputStream("src/eclipse/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -34,7 +36,10 @@ public class Main {
 					
 //		int[][] temp = getRotatedMap(1,1,1);
 //		printBoard(temp);
-		
+//		System.out.println(getScore(temp));
+//		board = temp;
+//		fillBoard();
+//		printBoard(temp);
 		StringBuilder sb = new StringBuilder();
 		while (K-- > 0) {
 			
@@ -42,8 +47,8 @@ public class Main {
 			int[][] nextBoard = null;
 			
 			for(int cnt = 1; cnt <= 3; cnt++) {
-				for(int i = 0; i <= 2; i++) {
-					for(int j = 0; j <= 2; j++) {
+				for(int j = 0; j <= 2; j++) {
+					for(int i = 0; i <= 2; i++) {
 						int[][] rotatedBoard = getRotatedMap(i,j,cnt);
 						int score = getScore(rotatedBoard);
 //						System.out.println("i = " + i + " j = " + j + " cnt = " + cnt);
