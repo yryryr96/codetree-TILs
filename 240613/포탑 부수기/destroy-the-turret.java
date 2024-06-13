@@ -4,7 +4,7 @@ import java.io.*;
 public class Main {
 	
 	static int N,M,K;
-	static int[] dy = {0,-1,0,1,1,1,-1,-1};
+	static int[] dy = {0,1,0,-1,1,1,-1,-1};
 	static int[] dx = {1,0,-1,0,1,-1,1,-1};
 	static int[][] map, turn;
 	static class Pair {
