@@ -57,7 +57,8 @@ public class Main {
 		int time = 1;
 		while (true) {
 			simulate(time);
-			
+//			System.out.println("time = " + time);
+//			printPerson(time);
 			if (arriveCnt == m) break;
 
 			time++;
@@ -71,6 +72,12 @@ public class Main {
 
 		move(time);
 		
+		if (cantGoList.size() != 0) {
+			for (Pair p : cantGoList) {
+				cantGo[p.y][p.x] = true; 
+			}
+		}
+		
 		if (time <= m) {
 			Pair camp = findBaseCamp(conv[time]);
 			cantGo[camp.y][camp.x] = true;
@@ -78,11 +85,7 @@ public class Main {
 //			System.out.println(camp.y + " " + camp.x);
 		}
 		
-		if (cantGoList.size() != 0) {
-			for (Pair p : cantGoList) {
-				cantGo[p.y][p.x] = true; 
-			}
-		}
+
 	}
 	
 	static void move(int time) {
@@ -102,6 +105,7 @@ public class Main {
 			q.add(p);
 			
 			Pair[][] trace = new Pair[n][n];
+
 			while(!q.isEmpty()) {
 				
 				Pair cur = q.poll();
@@ -121,12 +125,12 @@ public class Main {
 
 			q.clear();
 			q.add(conv[i]);
+
 			while(!q.isEmpty()) {
 				
 				Pair cur = q.poll();
 				Pair next = trace[cur.y][cur.x];
-//				System.out.println("time = " + time + " i = " + i + " " + cur.y + " " + cur.x);
-//				System.out.println("next.y = " + next.y + " next.x = " + next.x);
+
 				if (next.y == p.y && next.x == p.x) {
 					p.y = cur.y;
 					p.x = cur.x;
