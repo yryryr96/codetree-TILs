@@ -67,7 +67,9 @@ public class Main {
 //		System.out.println("ay = " + attacker.y + " ax = " + attacker.x + " ty = " + target.y + " tx = " + target.x);
 		attack(attacker, target);
 		int destroyedCount = destroyAndRecovery();
+//		System.out.println("map[attacker.y][attacker.x] = " + map[attacker.y][attacker.x]);
 		return destroyedCount == N*M - 1;
+		
 	}
 	
 	static int destroyAndRecovery() {
@@ -93,6 +95,8 @@ public class Main {
 		isAffected = new boolean[N][M];
 		
 		isAffected[attacker.y][attacker.x] = true; 
+		isAffected[target.y][target.x] = true;
+		
 		if (lazerAttack(attacker, target)) {
 		} else {
 			misileAttack(attacker, target);
@@ -104,7 +108,6 @@ public class Main {
 		int power = map[attacker.y][attacker.x];
 	
 		map[target.y][target.x] -= power;
-		isAffected[target.y][target.x] = true;
 		
 		for (int k = 0; k < 8; k++) {
 			
@@ -140,7 +143,7 @@ public class Main {
 			for(int k = 0; k < 4; k++) {
 				int ny = (N + cur.y + dy[k]) % N;
 				int nx = (M + cur.x + dx[k]) % M;
-				if (!inRange(ny,nx) || map[ny][nx] == 0 || visited[ny][nx]) continue;
+				if (map[ny][nx] == 0 || visited[ny][nx]) continue;
 				
 				q.add(new Pair(ny,nx));
 				visited[ny][nx] = true;
@@ -152,7 +155,6 @@ public class Main {
 		else {
 			
 			int power = map[attacker.y][attacker.x];
-			isAffected[target.y][target.x] = true;
 			map[target.y][target.x] -= power;
 			
 			Queue<Pair> nq = new LinkedList<>();
@@ -171,7 +173,6 @@ public class Main {
 				map[next.y][next.x] -= power/2; 
 				nq.add(next);
 			}
-			
 			return temp;
 		}
 	}
@@ -202,7 +203,7 @@ public class Main {
 					// 턴이 같다면
 					else if (turn[y][x] == turn[i][j]) {
 						// 행 열 합
-						if (y + x < i + j) {
+						if (y + x <= i + j) {
 							y = i; x = j;
 						}
 					}
@@ -239,7 +240,7 @@ public class Main {
 					// 턴이 같다면
 					else if (turn[y][x] == turn[i][j]) {
 						// 행 열 합
-						if (y + x > i + j) {
+						if (y + x >= i + j) {
 							y = i; x = j;
 						}
 					}
@@ -260,7 +261,7 @@ public class Main {
 	
 	static void printMap() {
 		for (int i = 0; i < N; i++) {
-			for(int j = 0; j < N; j++) {
+			for(int j = 0; j < M; j++) {
 				System.out.print(map[i][j] + " ");
 			}
 			System.out.println("");
