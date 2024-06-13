@@ -63,7 +63,7 @@ public class Main {
 		
 		Pair attacker = getAttacker(t);
 		Pair target = getTarget();
-		
+		map[attacker.y][attacker.x] += N+M;
 //		System.out.println("ay = " + attacker.y + " ax = " + attacker.x + " ty = " + target.y + " tx = " + target.x);
 		attack(attacker, target);
 		int destroyedCount = destroyAndRecovery();
@@ -100,7 +100,7 @@ public class Main {
 	}
 	
 	static void misileAttack(Pair attacker, Pair target) {
-		
+
 		int power = map[attacker.y][attacker.x];
 	
 		map[target.y][target.x] -= power;
@@ -110,7 +110,7 @@ public class Main {
 			
 			int ny = (N + target.y + dy[k]) % N;
 			int nx = (M + target.x + dx[k]) % M;
-			if (map[ny][nx] == 0) continue;
+			if (map[ny][nx] == 0 || (ny == attacker.y && nx == attacker.x)) continue;
 			else {
 				map[ny][nx] -= power/2;
 				isAffected[ny][nx] = true;
@@ -138,8 +138,8 @@ public class Main {
 			}
 			
 			for(int k = 0; k < 4; k++) {
-				int ny = cur.y + dy[k];
-				int nx = cur.x + dx[k];
+				int ny = (N + cur.y + dy[k]) % N;
+				int nx = (M + cur.x + dx[k]) % M;
 				if (!inRange(ny,nx) || map[ny][nx] == 0 || visited[ny][nx]) continue;
 				
 				q.add(new Pair(ny,nx));
@@ -170,7 +170,6 @@ public class Main {
 				isAffected[next.y][next.x] = true;
 				map[next.y][next.x] -= power/2; 
 				nq.add(next);
-//				System.out.println("ny = " + next.y + " nx = " + next.x);
 			}
 			
 			return temp;
@@ -211,7 +210,6 @@ public class Main {
 			}
 		}
 		
-		map[y][x] += N+M;
 		turn[y][x] = t;
 		return new Pair(y,x);
 	}
