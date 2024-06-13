@@ -151,29 +151,36 @@ public class Main {
 	static Pair findBaseCamp(Pair con) {
 		
 		Queue<Pair> q = new LinkedList<>();
-		boolean[][] visited = new boolean[n][n];
+		int[][] visited = new int[n][n];
+		List<Pair> candi = new ArrayList<>();
+		int minDist = Integer.MAX_VALUE;
 		
 		q.add(con);
-		visited[con.y][con.x] = true;
+		visited[con.y][con.x] = 1;
 		
 		while(!q.isEmpty()) {
 			Pair cur = q.poll();
 			
-			if (board[cur.y][cur.x] == 1) {
-				return new Pair(cur.y, cur.x);
-			}
-			
 			for(int k = 0; k < 4; k++) {
 				int ny = cur.y + dy[k];
 				int nx = cur.x + dx[k];
-				if (!inRange(ny,nx) || cantGo[ny][nx] || visited[ny][nx]) continue;
+				if (!inRange(ny,nx) || cantGo[ny][nx] || visited[ny][nx] != 0) continue;
 				
 				q.add(new Pair(ny,nx));
-				visited[ny][nx] = true;
+				visited[ny][nx] = visited[cur.y][cur.x] + 1;
+				if (board[ny][nx] == 1 && visited[ny][nx] <= minDist) {
+					minDist = visited[ny][nx];
+					candi.add(new Pair(ny,nx));
+				}
 			}
 		}
 		
-		return null;
+		Collections.sort(candi, (a,b) -> {
+			if (a.y != b.y) return a.y - b.y;
+			else return a.x - b.x;
+		});
+		
+		return candi.get(0);
 	}
 	
 	static void printPerson(int time) {
