@@ -26,7 +26,6 @@ public class Main {
 	static int ey, ex;
 	static int ans = 0;
 	static int size, sy, sx;
-    
 	public static void main(String[] args) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -163,30 +162,27 @@ public class Main {
 	
 	static void rotateMap() {
 		
-		int[][] temp1 = new int[size+1][size+1];
-		int[][] temp2 = new int[size+1][size+1];
-		
 		for (int i = sy; i <= sy + size; i++) {
 			for (int j = sx; j <= sx + size; j++) {
 				if (map[i][j] > 0) map[i][j]--;
 			}
 		}
-		
-		for (int i = 0; i <= size; i++) {
-			for (int j = 0; j <= size; j++) {
-				temp1[i][j] = map[i+sy][j+sx];
+
+		int[][] temp = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				temp[i][j] = map[i][j];
 			}
 		}
 		
-		for (int i = 0; i <= size; i++) {
-			for (int j = 0; j <= size; j++) {
-				temp2[i][j] = temp1[size-j][i];
-			}
-		}
-		
-		for (int i = 0; i <= size; i++) {
-			for (int j = 0; j <= size; j++) {
-				map[i+sy][j+sx] = temp2[i][j];
+		for (int i = sy; i <= sy + size; i++) {
+			for (int j = sx; j <= sx + size; j++) {
+				int oy = i - sy;
+				int ox = j - sx;
+				
+				int ry = ox;
+				int rx = size - oy;
+				map[ry+sy][rx+sx] = temp[i][j];
 			}
 		}
 	}
