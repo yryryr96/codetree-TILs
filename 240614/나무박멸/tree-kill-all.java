@@ -84,7 +84,9 @@ public class Main {
 				}
 			}
 		}
-		
+
+        if (ri == -1 && rj == -1) return;
+        
 		// 제초제 뿌리기
 		int treeDieCnt = board[ri][rj];
 		drug[ri][rj] = c;
