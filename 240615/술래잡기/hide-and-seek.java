@@ -63,6 +63,9 @@ public class Main {
 		initWay();
 		for(int turn = 1; turn <= k; turn++) {
 			simulate(turn);
+//			System.out.println("turn " + turn);
+//			System.out.println("master: " + master.y + " " + master.x + " " + master.d);
+//			printThief();
 		}
 		
 		System.out.println(answer);
@@ -85,13 +88,14 @@ public class Main {
 				if(isOut[id]) continue;
 				Pair t = thieves[id];
 				if(t.y == ny && t.x == nx) {
+//					System.out.println("id = " + id);
 					isOut[id] = true;
 					cnt++;
 				}
 			}
 		}
 		
-//		System.out.println(cnt);
+//		System.out.println("turn = " + turn + " cnt = " + cnt);
 		answer += turn*cnt;
 	}
 	
@@ -136,28 +140,12 @@ public class Main {
 				
 				t.d = (t.d + 2) % 4;
 				ny = t.y + dy[t.d];
-				nx = t.x + dx[t.d];
-				
-				if (master.y == ny && master.x == nx) continue;
-				t.y = ny;
-				t.x = nx;
-			} else {
-				
-				if (master.y == ny && master.x == nx) continue;
-				boolean tmp = true;
-				for(int i = 0; i<m; i++) {
-					Pair p = thieves[i];
-					if(p.y == ny && p.x == nx) {
-						tmp = false;
-						break;
-					}
-				}
-				
-				if(tmp) {
-					t.y = ny;
-					t.x = nx;
-				}
+				nx = t.x + dx[t.d];	
 			}
+			
+			if(ny == master.y && nx == master.x) continue;
+			t.y = ny;
+			t.x = nx;
 		}
 	}
 	
@@ -201,6 +189,13 @@ public class Main {
 	static boolean checkThief(int id) {
 		Pair t = thieves[id];
 		return Math.abs(master.y - t.y) + Math.abs(master.x - t.x) <= 3; 
+	}
+	
+	static void printThief() {
+		
+		for(int i = 0; i < m; i++) {
+			System.out.println("id = " + i + " " + thieves[i].y + " " + thieves[i].x + " " + isOut[i]);
+		}
 	}
 	
 	static boolean inRange(int y, int x) {
