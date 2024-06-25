@@ -162,8 +162,7 @@ public class Main {
 		answer += score;
 	}
 	
-	static void printBoard(int[][] b) {
-		System.out.println("=====================");
+	static void printBoard(int[][] b){
 		for(int i = 0; i < n; i++) {
 			for(int j = 0; j < n; j++) {
 				System.out.print(b[i][j] + " ");
